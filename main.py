@@ -71,14 +71,14 @@ while True:
     frost_point = get_frost_point_c(temp, dew_point)
 
     output_dict = {
+        'row': i,
         'humidity': humidity,
         'temperature': temp,
         'dew_point': dew_point,
         'frost_point': frost_point,
-        'temp_change_flag': (temp-previous_temp) > max_temp_rise_per_sec,
-        'dew_flag': dew_point < (temp-coolant_temp_drop),
-        'frost_flag': frost_point < (temp-coolant_temp_drop),
-        'row': i,
+        'temp_change_flag': int((temp-previous_temp) > max_temp_rise_per_sec),
+        'dew_flag': int(dew_point > (temp-coolant_temp_drop)),
+        'frost_flag': int(frost_point > (temp-coolant_temp_drop)),
     }
     # flashing LEDs alternately at 1 Hz to confirm new row was calculated
     led4.toggle()

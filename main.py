@@ -1,8 +1,7 @@
 # main.py -- put your code here
-import pyb
-from machine import I2C
 from si7021 import Si7021
 import math
+import pyb
 
 max_temp_rise_per_sec = 1  # degrees Celsius/second
 coolant_temp_drop = 10
@@ -40,8 +39,6 @@ def get_dew_point_c(t_air_c, rel_humidity):
 
 led3 = pyb.LED(3)
 led4 = pyb.LED(4)
-led4.on()
-led3.on()
 
 # flashing LEDs together at 10 Hz to confirm program start
 for j in range(20):
@@ -49,12 +46,10 @@ for j in range(20):
     led4.toggle()
     led3.toggle()
 
+sensor = Si7021()
 i = 1
 led4.on()
 led3.off()
-
-# bus = I2C(scl='Y9', sda='Y10', freq=100000)
-# sensor = Si7021(bus)
 
 # flashing LEDs alternating at 5 Hz to confirm that sensor object was creadted successfully
 for j in range(10):
@@ -65,8 +60,9 @@ for j in range(10):
 previous_temp = 1000
 
 while True:
-    # humidity, temp = sensor.read()
-    humidity, temp = (43, 22)
+    humidity, temp = sensor.readRH(), sensor.readTemp()
+    # humidity, temp = sensor.relative_humidity, sensor.temperature
+    # humidity, temp = (43, 22)
     dew_point = get_dew_point_c(temp, humidity)
     frost_point = get_frost_point_c(temp, dew_point)
 
